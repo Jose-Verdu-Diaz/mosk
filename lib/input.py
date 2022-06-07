@@ -16,7 +16,17 @@ def inp_int(prompt:str=None, options:list=None, exit=True):
     try: 
         if not prompt: prompt = 'Enter an option: '
         inp = input(prompt)
-    except Exception: input('Unexpected input. Press Enter to continue...')
+    except Exception: 
+        input('Unexpected input. Press Enter to continue...')
+        return None
+
+    if exit: 
+        if inp == 'e': return inp
+
+    try: inp = int(inp)
+    except Exception: 
+        input('Unexpected input. Press Enter to continue...')
+        return None
 
     if options: 
         if inp not in options: 

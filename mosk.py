@@ -1,6 +1,6 @@
 import os
 
-from lib.input import inp_str
+from lib.input import inp_str, inp_int
 from lib.gui import banner, main_menu, clear, new_menu, new_project, projects_menu
 from models.Project import Project
 from models.State import State
@@ -25,9 +25,13 @@ def main():
             while True:
                 print_list = [clear, banner, projects_menu]
                 for p in print_list: p(**kwargs)
-                inp = inp_str(options=['e', 'p', 't'])
+                inp = inp_int(options=list(range(len(state.projects))))
                 if inp == None: continue
                 elif inp == 'e': break
+
+                # Project Info
+                else:
+                    pass
 
         # Incubator
         elif inp == 'i':

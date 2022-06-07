@@ -54,6 +54,9 @@ def projects_menu(**kwargs):
     print('\n')
 
 
+def project_info(**kwargs):
+    pass
+
 def new_menu(**kwargs):
     print_list = [
         '(e)xit',
