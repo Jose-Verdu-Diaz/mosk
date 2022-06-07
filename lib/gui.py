@@ -17,10 +17,12 @@ class Clr:
         self.REVERSE = '\033[07m'
         self.STRIKETHROUGH = '\033[09m'
 
-def clear():
+
+def clear(**kwargs):
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def banner():
+
+def banner(**kwargs):
     banner ='''
     8b    d8  dP"Yb  .dP"Y8 88  dP 
     88b  d88 dP   Yb `Ybo." 88odP  
@@ -30,22 +32,47 @@ def banner():
     '''
     print(f'{Clr().CYAN}{banner}{Clr().ENDC}')
 
-def main_menu():
+
+def main_menu(**kwargs):
     print_list = [
         '(e)xit',
         '(p)rojects',
+        '(t)asks',
         '(i)ncubator',
         '(n)ew'
     ]
+    print('Main:')
     for p in print_list: print(f'\t{p}')
     print('\n')
 
-def new_menu():
+
+def projects_menu(**kwargs):
+    print_list = kwargs['project_names']
+    print_list.insert(0, '(e)xit\n')
+    print('Projects:')
+    for p in kwargs['project_names']: print(f'\t{p}')
+    print('\n')
+
+
+def new_menu(**kwargs):
     print_list = [
         '(e)xit',
         '(p)roject',
         '(t)ask'
     ]
     print('New:')
+    for p in print_list: print(f'\t{p}')
+    print('\n')
+
+
+def new_project(**kwargs):
+    data = {
+        '(n)ame: ': kwargs['name'],
+        '(d)escription: ': kwargs['description']
+    }
+    print_list = [f'{d}{data[d]}' for d in data]
+    print_list.insert(0, '(c)reate\n')
+    print_list.insert(0, '(e)xit')
+    print('New Project:')
     for p in print_list: print(f'\t{p}')
     print('\n')

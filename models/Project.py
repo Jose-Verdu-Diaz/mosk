@@ -7,5 +7,7 @@ class Project:
         self.description = description
         self.tasks = None
 
+        self.save()
+
     def save(self):
-        with open(f'data/{self.name}.pkl', 'wb') as f: pkl.dump(self)
+        with open(f'data/projects/{self.name}.pkl', 'wb') as f: pkl.dump(self, f)
