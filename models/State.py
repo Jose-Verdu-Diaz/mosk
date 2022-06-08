@@ -1,6 +1,8 @@
 import os
 import pickle as pkl
 
+from models.Project import Project
+
 class State:
 
     def __init__(self) -> None:
@@ -18,3 +20,7 @@ class State:
 
     def prj_list(self):
         return [f'({i}): {p.name}' for i, p in enumerate(self.projects)]
+
+    
+    def new_project(self, **kwargs):
+        self.projects.append(Project(**kwargs))

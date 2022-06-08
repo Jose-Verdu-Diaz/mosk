@@ -46,16 +46,27 @@ def main_menu(**kwargs):
     print('\n')
 
 
-def projects_menu(**kwargs):
-    print_list = kwargs['project_names']
-    print_list.insert(0, '(e)xit\n')
+def projects_menu(project_names):
+    project_names = project_names.copy()
+    project_names.insert(0, '(e)xit\n')
     print('Projects:')
-    for p in kwargs['project_names']: print(f'\t{p}')
+    for p in project_names: print(f'\t{p}')
     print('\n')
 
 
-def project_info(**kwargs):
-    pass
+def project_info(project_info):
+    project_info = project_info.copy()
+    print_list = [
+        '(e)xit',
+        'new (t)ask\n',
+    ]
+    print_list.append(f'Name: {project_info["name"]}')
+    print_list.append(f'Description: {project_info["description"]}')
+    print_list.append(f'Tasks:')
+    print_list.extend([f'\t{project_info[i]}' for i in project_info['tasks']])
+    print('Project Info:')
+    for p in print_list: print(f'\t{p}')
+    print('\n')
 
 def new_menu(**kwargs):
     print_list = [
