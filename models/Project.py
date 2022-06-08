@@ -22,7 +22,7 @@ class Project:
         info = {
             'name': self.name,
             'description': self.description,
-            'tasks': [f'{clr.STRIKETHROUGH}{t.name}{clr.ENDC}' if t.completed else t.name for t in self.tasks]
+            'tasks': [t.name_str() for t in self.tasks]
         }
         return info
 

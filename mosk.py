@@ -3,7 +3,7 @@ import time
 
 from lib.keyboard import read_key, on_press_key
 from lib.input import inp_str, inp_int
-from lib.gui import banner, main_menu, clear, new_menu, new_project, new_task, projects_menu, project_info
+from lib.gui import Clr, banner, main_menu, clear, new_menu, new_project, new_task, projects_menu, project_info
 from models.Project import Project
 from models.State import State
 
@@ -15,7 +15,8 @@ def main():
     while True:
         print_list = [clear, banner, main_menu]
         for p in print_list: p()
-        inp = inp_str(options=['e', 'p', 't', 'i', 'n'])
+        #inp = inp_str(options=['e', 'p', 't', 'i', 'n'])
+        inp = read_key()
         if inp == None: continue
         elif inp == 'e': break
 
@@ -69,6 +70,11 @@ def main():
                             kwargs['project_info'] = state.projects[proj_id].project_info()
                             time.sleep(0.1) # This solves a bug...???
 
+                        elif inp == 'i': 
+                            state.projects[proj_id].complete_task(kwargs['selected_task'])
+                            kwargs['project_info'] = state.projects[proj_id].project_info()
+                            time.sleep(0.1) # This solves a bug...???
+
                         elif inp == 'up':
                             if kwargs['selected_task'] > 0: 
                                 kwargs['selected_task'] -= 1
@@ -87,7 +93,8 @@ def main():
             while True:
                 print_list[-1] = new_menu
                 for p in print_list: p()
-                inp = inp_str(options=['e', 'p', 't'])
+                #inp = inp_str(options=['e', 'p', 't'])
+                inp = read_key()
                 if inp == None: continue
                 elif inp == 'e': break
 
@@ -100,7 +107,8 @@ def main():
                     while True:
                         print_list[-1] = new_project
                         for p in print_list: p(**kwargs)
-                        inp = inp_str(options=['e', 'c', 'n', 'd'])
+                        #inp = inp_str(options=['e', 'c', 'n', 'd'])
+                        inp = read_key()
                         if inp == None: continue
                         elif inp == 'e': break
 

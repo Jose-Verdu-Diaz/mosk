@@ -62,8 +62,8 @@ def project_info(**kwargs):
     print_list.append(f'Description: {project_info["description"]}')
     print_list.append(f'Tasks:')
     if len(project_info['tasks']):
-        print_list.extend([f'\t{clr.GREEN}{t}{clr.ENDC}' if i == selected_task  else f'\t{t}' for i, t in enumerate(project_info['tasks'])])
-    print('(e)xit | (n)ew task | (c)omplete task\n')
+        print_list.extend([f'\t{clr.REVERSE}{t}{clr.ENDC}' if i == selected_task  else f'\t{t}' for i, t in enumerate(project_info['tasks'])])
+    print('(e)xit | (n)ew task | (c)omplete task | change (i)mportance\n')
     print('Project Info:')
     for p in print_list: print(f'\t{p}')
     print('\n')
