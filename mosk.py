@@ -32,11 +32,9 @@ def main():
                 # Project Info
                 else:
                     proj_id = inp
-                    kwargs = {
-                        'project_info': state.projects[proj_id].project_info(),
-                        'selected_task': 0
-                        }
+                    kwargs = {'selected_task': 0}
                     while True:
+                        kwargs['project_info'] = state.projects[proj_id].project_info()
                         print_list[-1] = project_info
                         for p in print_list: p(**kwargs)
 
@@ -47,10 +45,7 @@ def main():
 
                         # Project Info New Task
                         elif inp == 'n':
-                            kwargs = {
-                                'name': '',
-                                'description': ''
-                            } 
+                            kwargs['name'], kwargs['description'] = '', ''
                             while True:
                                 print_list[-1] = new_task
                                 for p in print_list: p(**kwargs)
@@ -72,12 +67,16 @@ def main():
                         elif inp == 'c': 
                             state.projects[proj_id].complete_task(kwargs['selected_task'])
                             kwargs['project_info'] = state.projects[proj_id].project_info()
-                            time.sleep(0.2) # This solves a bug...???
+                            time.sleep(0.1) # This solves a bug...???
 
                         elif inp == 'up':
-                            if kwargs['selected_task'] > 0: kwargs['selected_task'] -= 1
+                            if kwargs['selected_task'] > 0: 
+                                kwargs['selected_task'] -= 1
+                                time.sleep(0.1) # This solves a bug...???
                         elif inp == 'down':
-                            if kwargs['selected_task'] < len(state.projects[proj_id].tasks) - 1: kwargs['selected_task'] += 1
+                            if kwargs['selected_task'] < len(state.projects[proj_id].tasks) - 1: 
+                                kwargs['selected_task'] += 1
+                                time.sleep(0.1) # This solves a bug...???
 
         # Incubator
         elif inp == 'i':

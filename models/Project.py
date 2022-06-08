@@ -28,7 +28,7 @@ class Project:
 
 
     def new_task(self, **kwargs):
-        self.tasks.append(Task(**kwargs))
+        self.tasks.append(Task(name=kwargs['name'], description=kwargs['description']))
         self.save()
 
 

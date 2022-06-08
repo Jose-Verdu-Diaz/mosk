@@ -54,8 +54,9 @@ def projects_menu(project_names):
     print('\n')
 
 
-def project_info(project_info, selected_task):
+def project_info(**kwargs):
     clr = Clr()
+    project_info, selected_task = kwargs['project_info'], kwargs['selected_task']
     project_info = project_info.copy()
     print_list = [f'Name: {project_info["name"]}']
     print_list.append(f'Description: {project_info["description"]}')
