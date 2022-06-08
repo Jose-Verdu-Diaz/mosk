@@ -1,5 +1,7 @@
 import pickle as pkl
 
+from models.Task import Task
+
 class Project:
 
     def __init__(self, name:str, description:str=None) -> None:
@@ -21,3 +23,8 @@ class Project:
             'tasks': [t.name for t in self.tasks]
         }
         return info
+
+
+    def new_task(self, **kwargs):
+        self.tasks.append(Task(**kwargs))
+        self.save()

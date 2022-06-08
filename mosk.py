@@ -1,7 +1,7 @@
 import os
 
 from lib.input import inp_str, inp_int
-from lib.gui import banner, main_menu, clear, new_menu, new_project, projects_menu, project_info
+from lib.gui import banner, main_menu, clear, new_menu, new_project, new_task, projects_menu, project_info
 from models.Project import Project
 from models.State import State
 
@@ -29,14 +29,39 @@ def main():
 
                 # Project Info
                 else:
-                    kwargs = {'project_info':state.projects[inp].project_info()}
-
+                    proj_id = inp
                     while True:
+                        kwargs = {'project_info':state.projects[proj_id].project_info()}
                         print_list[-1] = project_info
                         for p in print_list: p(**kwargs)
-                        inp = inp_str(options=['e'])
+                        inp = inp_str(options=['e', 'n'])
                         if inp == None: continue
                         elif inp == 'e': break
+
+                        # Project Info New Task
+                        elif inp == 'n':
+                            kwargs = {
+                                'name':'',
+                                'description':''
+                            } 
+                            while True:
+                                print_list[-1] = new_task
+                                for p in print_list: p(**kwargs)
+                                inp = inp_str(options=['e', 'c', 'n', 'd'])
+                                if inp == None: continue
+                                elif inp == 'e': break
+
+                                # Project Info New Task: Name
+                                elif inp == 'n': kwargs['name'] = inp_str(prompt='Enter name: ')
+
+                                # Project Info New Task: Description
+                                elif inp == 'd': kwargs['description'] = inp_str(prompt='Enter description: ')
+
+                                # Project Info New Task: Create
+                                elif inp == 'c':
+                                    state.projects[proj_id].new_task(**kwargs)
+                                    break
+
 
         # Incubator
         elif inp == 'i':

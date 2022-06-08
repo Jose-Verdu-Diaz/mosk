@@ -58,15 +58,16 @@ def project_info(project_info):
     project_info = project_info.copy()
     print_list = [
         '(e)xit',
-        'new (t)ask\n',
+        '(n)ew task\n',
     ]
     print_list.append(f'Name: {project_info["name"]}')
     print_list.append(f'Description: {project_info["description"]}')
     print_list.append(f'Tasks:')
-    print_list.extend([f'\t{project_info[i]}' for i in project_info['tasks']])
+    print_list.extend([f'\t{i}' for i in project_info['tasks']])
     print('Project Info:')
     for p in print_list: print(f'\t{p}')
     print('\n')
+
 
 def new_menu(**kwargs):
     print_list = [
@@ -88,5 +89,18 @@ def new_project(**kwargs):
     print_list.insert(0, '(c)reate\n')
     print_list.insert(0, '(e)xit')
     print('New Project:')
+    for p in print_list: print(f'\t{p}')
+    print('\n')
+
+
+def new_task(**kwargs):
+    data = {
+        '(n)ame: ': kwargs['name'],
+        '(d)escription: ': kwargs['description']
+    }
+    print_list = [f'{d}{data[d]}' for d in data]
+    print_list.insert(0, '(c)reate\n')
+    print_list.insert(0, '(e)xit')
+    print('New Task:')
     for p in print_list: print(f'\t{p}')
     print('\n')

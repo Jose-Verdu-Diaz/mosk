@@ -8,6 +8,7 @@ class Task():
         self.tasks = []
         self.level = level
         self.importance = importance
+        self.completed = False
 
     def add_task(self, name:str, description:str=None):
         self.tasks.append(Task(name, description, self.level + 1))
