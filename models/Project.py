@@ -1,5 +1,6 @@
 import pickle as pkl
 
+from lib.gui import Clr
 from models.Task import Task
 
 class Project:
@@ -17,14 +18,20 @@ class Project:
 
 
     def project_info(self):
+        clr = Clr()
         info = {
             'name': self.name,
             'description': self.description,
-            'tasks': [t.name for t in self.tasks]
+            'tasks': [f'{clr.STRIKETHROUGH}{t.name}{clr.ENDC}' if t.completed else t.name for t in self.tasks]
         }
         return info
 
 
     def new_task(self, **kwargs):
         self.tasks.append(Task(**kwargs))
+        self.save()
+
+
+    def complete_task(self, task_id):
+        self.tasks[task_id].completed = not self.tasks[task_id].completed
         self.save()

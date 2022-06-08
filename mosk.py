@@ -1,5 +1,7 @@
 import os
+import time
 
+from lib.keyboard import read_key, on_press_key
 from lib.input import inp_str, inp_int
 from lib.gui import banner, main_menu, clear, new_menu, new_project, new_task, projects_menu, project_info
 from models.Project import Project
@@ -20,7 +22,7 @@ def main():
         # Projects
         elif inp == 'p':
             while True:
-                kwargs = {'project_names':state.prj_list()}
+                kwargs = {'project_names': state.prj_list()}
                 print_list[-1] = projects_menu
                 for p in print_list: p(**kwargs)
                 inp = inp_int(options=list(range(len(state.projects))))
@@ -30,19 +32,24 @@ def main():
                 # Project Info
                 else:
                     proj_id = inp
+                    kwargs = {
+                        'project_info': state.projects[proj_id].project_info(),
+                        'selected_task': 0
+                        }
                     while True:
-                        kwargs = {'project_info':state.projects[proj_id].project_info()}
                         print_list[-1] = project_info
                         for p in print_list: p(**kwargs)
-                        inp = inp_str(options=['e', 'n'])
+
+                        inp = read_key()
+                        #inp = inp_str(options=['e', 'n'])
                         if inp == None: continue
                         elif inp == 'e': break
 
                         # Project Info New Task
                         elif inp == 'n':
                             kwargs = {
-                                'name':'',
-                                'description':''
+                                'name': '',
+                                'description': ''
                             } 
                             while True:
                                 print_list[-1] = new_task
@@ -62,6 +69,15 @@ def main():
                                     state.projects[proj_id].new_task(**kwargs)
                                     break
 
+                        elif inp == 'c': 
+                            state.projects[proj_id].complete_task(kwargs['selected_task'])
+                            kwargs['project_info'] = state.projects[proj_id].project_info()
+                            time.sleep(0.2) # This solves a bug...???
+
+                        elif inp == 'up':
+                            if kwargs['selected_task'] > 0: kwargs['selected_task'] -= 1
+                        elif inp == 'down':
+                            if kwargs['selected_task'] < len(state.projects[proj_id].tasks) - 1: kwargs['selected_task'] += 1
 
         # Incubator
         elif inp == 'i':
@@ -79,8 +95,8 @@ def main():
                 # Create New Project
                 elif inp == 'p':
                     kwargs = {
-                        'name':'',
-                        'description':''
+                        'name': '',
+                        'description': ''
                     }
                     while True:
                         print_list[-1] = new_project
