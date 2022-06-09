@@ -81,6 +81,9 @@ from __future__ import print_function as _print_function
 
 version = '0.13.4'
 
+import sys
+from termios import tcflush, TCIFLUSH
+
 import re as _re
 import itertools as _itertools
 import collections as _collections
@@ -933,6 +936,8 @@ def read_key(suppress=False):
     if missing, its scan code.
     """
     event = read_event(suppress)
+    _time.sleep(0.15)
+    tcflush(sys.stdin, TCIFLUSH)
     return event.name or event.scan_code
 
 def read_hotkey(suppress=True):

@@ -1,5 +1,7 @@
 import os
+import sys
 import time
+from termios import tcflush, TCIFLUSH
 
 from lib.keyboard import read_key, on_press_key
 from lib.input import inp_str, inp_int
@@ -15,7 +17,6 @@ def main():
     while True:
         print_list = [clear, banner, main_menu]
         for p in print_list: p()
-        #inp = inp_str(options=['e', 'p', 't', 'i', 'n'])
         inp = read_key()
         if inp == None: continue
         elif inp == 'e': break
@@ -40,7 +41,6 @@ def main():
                         for p in print_list: p(**kwargs)
 
                         inp = read_key()
-                        #inp = inp_str(options=['e', 'n'])
                         if inp == None: continue
                         elif inp == 'e': break
 
@@ -50,15 +50,19 @@ def main():
                             while True:
                                 print_list[-1] = new_task
                                 for p in print_list: p(**kwargs)
-                                inp = inp_str(options=['e', 'c', 'n', 'd'])
+                                inp = read_key()
                                 if inp == None: continue
                                 elif inp == 'e': break
 
                                 # Project Info New Task: Name
-                                elif inp == 'n': kwargs['name'] = inp_str(prompt='Enter name: ')
+                                elif inp == 'n':
+                                    for p in print_list: p(**kwargs)
+                                    kwargs['name'] = inp_str(prompt='Enter name: ')
 
                                 # Project Info New Task: Description
-                                elif inp == 'd': kwargs['description'] = inp_str(prompt='Enter description: ')
+                                elif inp == 'd':
+                                    for p in print_list: p(**kwargs)
+                                    kwargs['description'] = inp_str(prompt='Enter description: ')
 
                                 # Project Info New Task: Create
                                 elif inp == 'c':
@@ -68,21 +72,17 @@ def main():
                         elif inp == 'c': 
                             state.projects[proj_id].complete_task(kwargs['selected_task'])
                             kwargs['project_info'] = state.projects[proj_id].project_info()
-                            time.sleep(0.1) # This solves a bug...???
 
                         elif inp == 'i': 
                             state.projects[proj_id].complete_task(kwargs['selected_task'])
                             kwargs['project_info'] = state.projects[proj_id].project_info()
-                            time.sleep(0.1) # This solves a bug...???
 
                         elif inp == 'up':
                             if kwargs['selected_task'] > 0: 
                                 kwargs['selected_task'] -= 1
-                                time.sleep(0.1) # This solves a bug...???
                         elif inp == 'down':
                             if kwargs['selected_task'] < len(state.projects[proj_id].tasks) - 1: 
                                 kwargs['selected_task'] += 1
-                                time.sleep(0.1) # This solves a bug...???
 
         # Incubator
         elif inp == 'i':
@@ -93,7 +93,6 @@ def main():
             while True:
                 print_list[-1] = new_menu
                 for p in print_list: p()
-                #inp = inp_str(options=['e', 'p', 't'])
                 inp = read_key()
                 if inp == None: continue
                 elif inp == 'e': break
@@ -107,16 +106,19 @@ def main():
                     while True:
                         print_list[-1] = new_project
                         for p in print_list: p(**kwargs)
-                        #inp = inp_str(options=['e', 'c', 'n', 'd'])
                         inp = read_key()
                         if inp == None: continue
                         elif inp == 'e': break
 
                         # Create New Project: Name
-                        elif inp == 'n': kwargs['name'] = inp_str(prompt='Enter name: ')
+                        elif inp == 'n':
+                            for p in print_list: p(**kwargs)
+                            kwargs['name'] = inp_str(prompt='Enter name: ')
 
                         # Create New Project: Description
-                        elif inp == 'd': kwargs['description'] = inp_str(prompt='Enter description: ')
+                        elif inp == 'd': 
+                            for p in print_list: p(**kwargs)
+                            kwargs['description'] = inp_str(prompt='Enter description: ')
 
                         # Create New Project: Create
                         elif inp == 'c':
