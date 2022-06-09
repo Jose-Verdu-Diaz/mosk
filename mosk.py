@@ -10,6 +10,42 @@ from models.Project import Project
 from models.State import State
 
 
+def create_task(state, print_list, proj_id, selected_task):
+    kwargs = {
+        'name': '',
+        'description': '',
+        'importance': 0,
+        'selected_task': selected_task
+    }
+    while True:
+        print_list[-1] = new_task
+        for p in print_list: p(**kwargs)
+        inp = read_key()
+        if inp == None: continue
+        elif inp == 'e': break
+
+        elif inp == 'left':
+            if kwargs['importance'] > 0:
+                kwargs['importance'] -= 1
+        elif inp == 'right':
+            if kwargs['importance'] < 4:
+                kwargs['importance'] += 1
+
+        # Project Info New Task: Name
+        elif inp == 'n':
+            for p in print_list: p(**kwargs)
+            kwargs['name'] = inp_str(prompt='Enter name: ')
+
+        # Project Info New Task: Description
+        elif inp == 'd':
+            for p in print_list: p(**kwargs)
+            kwargs['description'] = inp_str(prompt='Enter description: ')
+
+        # Project Info New Task: Create
+        elif inp == 'c': 
+            state.projects[proj_id].new_task(**kwargs)
+            break
+
 def main():
     state = State()
 
@@ -39,7 +75,7 @@ def main():
                     # Project Info
                     else:
                         proj_id = inp
-                        kwargs = {'selected_task': 0}
+                        kwargs = {'selected_task': [0]}
                         while True:
                             kwargs['project_info'] = state.projects[proj_id].project_info()
                             print_list[-1] = project_info
@@ -51,50 +87,34 @@ def main():
 
                             # Project Info New Task
                             elif inp == 'n':
-                                kwargs['name'], kwargs['description'], kwargs['importance'] = '', '', 0
-                                while True:
-                                    print_list[-1] = new_task
-                                    for p in print_list: p(**kwargs)
-                                    inp = read_key()
-                                    if inp == None: continue
-                                    elif inp == 'e': break
+                                create_task(state, print_list, proj_id, None)
 
-                                    elif inp == 'left':
-                                        if kwargs['importance'] > 0: 
-                                            kwargs['importance'] -= 1
-                                    elif inp == 'right':
-                                        if kwargs['importance'] < 4: 
-                                            kwargs['importance'] += 1                                    
-
-                                    # Project Info New Task: Name
-                                    elif inp == 'n':
-                                        for p in print_list: p(**kwargs)
-                                        kwargs['name'] = inp_str(prompt='Enter name: ')
-
-                                    # Project Info New Task: Description
-                                    elif inp == 'd':
-                                        for p in print_list: p(**kwargs)
-                                        kwargs['description'] = inp_str(prompt='Enter description: ')
-
-                                    # Project Info New Task: Create
-                                    elif inp == 'c':
-                                        state.projects[proj_id].new_task(**kwargs)
-                                        break
-
+                            # Project Info: Complete Task
                             elif inp == 'c': 
-                                state.projects[proj_id].complete_task(kwargs['selected_task'])
+                                state.projects[proj_id].complete_task(kwargs['selected_task'][-1])
                                 kwargs['project_info'] = state.projects[proj_id].project_info()
 
-                            elif inp == 'i': 
-                                state.projects[proj_id].complete_task(kwargs['selected_task'])
-                                kwargs['project_info'] = state.projects[proj_id].project_info()
+                            # Project Info: Add Subtask
+                            elif inp == 's': 
+                                create_task(state, print_list, proj_id, kwargs['selected_task'])
 
+                            # Project Info: Task up
                             elif inp == 'up':
-                                if kwargs['selected_task'] > 0: 
-                                    kwargs['selected_task'] -= 1
+                                if kwargs['selected_task'][-1] > 0: 
+                                    kwargs['selected_task'][-1] -= 1
+
+                            # Project Info: Task down
                             elif inp == 'down':
-                                if kwargs['selected_task'] < len(state.projects[proj_id].tasks) - 1: 
-                                    kwargs['selected_task'] += 1
+                                if kwargs['selected_task'][-1] < len(state.projects[proj_id].tasks) - 1: 
+                                    kwargs['selected_task'][-1] += 1
+
+                            elif inp == 'right':
+                                if len(state.projects[proj_id].tasks[kwargs['selected_task'][-1]].tasks):
+                                    kwargs['selected_task'].append(0)
+
+                            elif inp == 'left':
+                                if len(kwargs['selected_task']) > 1:
+                                    kwargs['selected_task'].pop()
 
         # Incubator
         elif inp == 'i':

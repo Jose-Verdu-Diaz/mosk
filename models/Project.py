@@ -17,18 +17,30 @@ class Project:
         with open(f'data/projects/{self.name}.pkl', 'wb') as f: pkl.dump(self, f)
 
 
-    def project_info(self):
-        clr = Clr()
+    def project_info(self, **kwargs):
+        total = []
+        for i, l in enumerate(kwargs['selected_task']):
+            if i == 0: total.append(self.tasks)
+            else: total.append(total[-1][l].tasks, l)
+
+        #TODO: Display subtasks
+
         info = {
             'name': self.name,
             'description': self.description,
-            'tasks': [t.name_str() for t in self.tasks]
+            'tasks': task_list
         }
         return info
 
 
     def new_task(self, **kwargs):
-        self.tasks.append(Task(**kwargs))
+        if kwargs['selected_task'] == None:
+            input('You are adding a task at level 0')
+            self.tasks.append(Task(**kwargs))
+        else:
+            input('You are adding a task at a deeper level')
+            self.tasks[kwargs['selected_task'][0]].new_task(**kwargs)
+
         self.save()
 
 
