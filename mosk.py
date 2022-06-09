@@ -51,13 +51,20 @@ def main():
 
                             # Project Info New Task
                             elif inp == 'n':
-                                kwargs['name'], kwargs['description'] = '', ''
+                                kwargs['name'], kwargs['description'], kwargs['importance'] = '', '', 0
                                 while True:
                                     print_list[-1] = new_task
                                     for p in print_list: p(**kwargs)
                                     inp = read_key()
                                     if inp == None: continue
                                     elif inp == 'e': break
+
+                                    elif inp == 'left':
+                                        if kwargs['importance'] > 0: 
+                                            kwargs['importance'] -= 1
+                                    elif inp == 'right':
+                                        if kwargs['importance'] < 4: 
+                                            kwargs['importance'] += 1                                    
 
                                     # Project Info New Task: Name
                                     elif inp == 'n':

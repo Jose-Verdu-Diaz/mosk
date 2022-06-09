@@ -94,11 +94,15 @@ def new_project(**kwargs):
 
 
 def new_task(**kwargs):
+    clr = Clr()
     data = {
         '(n)ame: ': kwargs['name'],
         '(d)escription: ': kwargs['description']
     }
+    imp_clr = ['', clr.CYAN, clr.GREEN, clr.YELLOW, clr.RED]
+    imp_str = " ".join([f"{clr.REVERSE}{imp_clr[i]}{i}{clr.ENDC}" if kwargs["importance"] == i else f'{imp_clr[i]}{i}{clr.ENDC}' for i in range(5)])
     print_list = [f'{d}{data[d]}' for d in data]
+    print_list.append(f'Importance: {imp_str}')
     print_list.insert(0, '(c)reate\n')
     print_list.insert(0, '(e)xit')
     print('New Task:')
