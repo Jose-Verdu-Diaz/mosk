@@ -1,4 +1,7 @@
 import os
+import sys
+
+from lib.utils import flatten_list
 
 class Clr:
 
@@ -56,17 +59,28 @@ def projects_menu(project_names):
 
 def project_info(**kwargs):
     clr = Clr()
-    project_info, selected_task = kwargs['project_info'], kwargs['selected_task'][-1]
+    project_info, selected_task = kwargs['project_info'], kwargs['selected_task']
+    print(project_info)
     project_info = project_info.copy()
     print_list = [f'Name: {project_info["name"]}']
     print_list.append(f'Description: {project_info["description"]}')
-    print_list.append(f'Tasks:')
+    print_list.append(f'Tasks:')  
+
     if len(project_info['tasks']):
-        print_list.extend([f'{clr.REVERSE}{t}{clr.ENDC}' if i == selected_task  else t for i, t in enumerate(project_info['tasks'])])
+        for i, idx in enumerate(selected_task):
+            if i == 0: task_idx = idx
+            else: task_idx += idx + 1
+
+            if len(selected_task) > i + 1: project_info['tasks'][task_idx] = project_info['tasks'][task_idx].replace('▴','▾')
+
+        print_list.extend([f'{clr.REVERSE}{t}{clr.ENDC}' if i == task_idx  else t for i, t in enumerate(project_info['tasks'])]) 
+
     print('(e)xit | (n)ew task | (c)omplete task | add (s)ubtask\n')
     print('Project Info:')
     for p in print_list: print(f'\t{p}')
     print('\n')
+    print(selected_task)
+    print(task_idx)
 
 
 def new_menu(**kwargs):

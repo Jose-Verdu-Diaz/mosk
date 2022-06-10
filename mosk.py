@@ -77,7 +77,7 @@ def main():
                         proj_id = inp
                         kwargs = {'selected_task': [0]}
                         while True:
-                            kwargs['project_info'] = state.projects[proj_id].project_info()
+                            kwargs['project_info'] = state.projects[proj_id].project_info(**kwargs)
                             print_list[-1] = project_info
                             for p in print_list: p(**kwargs)
 
@@ -100,21 +100,22 @@ def main():
 
                             # Project Info: Task up
                             elif inp == 'up':
-                                if kwargs['selected_task'][-1] > 0: 
+                                if kwargs['selected_task'][-1] > 0:
                                     kwargs['selected_task'][-1] -= 1
 
                             # Project Info: Task down
                             elif inp == 'down':
-                                if kwargs['selected_task'][-1] < len(state.projects[proj_id].tasks) - 1: 
+                                if kwargs['selected_task'][-1] < len(state.projects[proj_id].selected_task(**kwargs).tasks) - 1: 
                                     kwargs['selected_task'][-1] += 1
 
                             elif inp == 'right':
-                                if len(state.projects[proj_id].tasks[kwargs['selected_task'][-1]].tasks):
+                                if len(state.projects[proj_id].selected_task(**kwargs).tasks):
                                     kwargs['selected_task'].append(0)
 
                             elif inp == 'left':
                                 if len(kwargs['selected_task']) > 1:
                                     kwargs['selected_task'].pop()
+
 
         # Incubator
         elif inp == 'i':

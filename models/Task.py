@@ -11,12 +11,11 @@ class Task():
         self.description = kwargs['description']
         self.tasks = []
         if kwargs['selected_task'] == None: self.level = 0
-        else: self.level = len(kwargs['selected_task']) - 1
+        else: self.level = len(kwargs['selected_task'])
         self.importance = kwargs['importance']
         self.completed = False
         self.creation = dt.datetime.now()
-
-        input(f'The task is at level: {self.level}')
+        
 
     def new_task(self, **kwargs):
         if len(kwargs['selected_task']) - 1 == self.level: self.tasks.append(Task(**kwargs))
@@ -28,7 +27,7 @@ class Task():
         imp_clr = ['', clr.CYAN, clr.GREEN, clr.YELLOW, clr.RED]
         
         txt = self.name if self.completed else f'{self.name} ⬤ {clr.ENDC}'
-        if self.tasks: txt = f'▲ {txt}'
+        if self.tasks: txt = f'▴ {txt}'
         for l in range(self.level + 1): txt = f'\t{txt}'
 
         ret = f'{clr.STRIKETHROUGH}{clr.GREY}{txt}' if self.completed else f'{imp_clr[self.importance]}{txt}'

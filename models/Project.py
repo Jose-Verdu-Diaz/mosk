@@ -1,6 +1,8 @@
 import pickle as pkl
+import time
 
 from lib.gui import Clr
+from lib.utils import flatten_list
 from models.Task import Task
 
 class Project:
@@ -17,13 +19,39 @@ class Project:
         with open(f'data/projects/{self.name}.pkl', 'wb') as f: pkl.dump(self, f)
 
 
-    def project_info(self, **kwargs):
-        total = []
-        for i, l in enumerate(kwargs['selected_task']):
-            if i == 0: total.append(self.tasks)
-            else: total.append(total[-1][l].tasks, l)
+    def list_tasks(self, **kwargs):
+        selected_task = kwargs['selected_task']
 
-        #TODO: Display subtasks
+        total = []
+        for i, l in enumerate(selected_task):
+            if i == 0: total.append(self.tasks)
+            else: total.append(total[-1][selected_task[i - 1]].tasks)
+
+        task_joined = total[0]
+        for i in range(len(selected_task)): 
+            if i == 0: continue
+            task_joined.insert(selected_task[i - 1] + 1, total[i])
+
+        result_list = flatten_list(task_joined)
+
+        return result_list
+
+
+    def selected_task(self, **kwargs):
+        selected_task = kwargs['selected_task']
+        total = self.list_tasks(**kwargs)
+        total = flatten_list(total)
+
+        for i, idx in enumerate(selected_task):
+            if i == 0: task_idx = idx
+            else: task_idx += idx + 1
+
+        return total[task_idx]
+
+
+    def project_info(self, **kwargs):
+        task_list = []
+        for t in self.list_tasks(**kwargs): task_list.append(t.name_str())
 
         info = {
             'name': self.name,
@@ -34,12 +62,9 @@ class Project:
 
 
     def new_task(self, **kwargs):
-        if kwargs['selected_task'] == None:
-            input('You are adding a task at level 0')
-            self.tasks.append(Task(**kwargs))
-        else:
-            input('You are adding a task at a deeper level')
-            self.tasks[kwargs['selected_task'][0]].new_task(**kwargs)
+        selected_task = kwargs['selected_task']
+        if selected_task == None: self.tasks.append(Task(**kwargs))
+        else: self.tasks[selected_task[0]].new_task(**kwargs)
 
         self.save()
 
